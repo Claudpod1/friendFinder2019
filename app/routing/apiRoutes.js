@@ -1,28 +1,48 @@
-var friends = require("../data/friends");
+var friends = require("../data/friends.js");
 
 module.exports = function (app) {
 
 
-    app.get("/api/honme", function (req, res) {
+    app.get("/api/home", function (req, res) {
         res.send("Welcome to Friend Finder.");
     });
 
-    app.get("/api/survey", function (req, res) {
+    app.get("/api/friends", function (req, res) {
         res.json(friends);
     });
 
 
-    app.post("/api/survey", function (req, res) {
-        // Note the code here. Our "server" will respond to requests and let users know if they have a table or not.
-        // It will do this by sending out the value "true" have a table
-        // req.body is available since we're using the body parsing middleware
-        if (friends.length < 5) {
-            friends.push(req.body);
-            res.json(true);
-        }
-        // else {
-        //     friends.push(req.body);
-        //     res.json(false);
-        // }
+    app.post("/api/friends", function (req, res) {
+   //loop through the friends from friends.js 
+   //comparing the scores - math part 
+   //send back the lowest 
+    console.log(req.body);
+    console.log(req.body.score);
+    
+    
+   var maxDifference = 50
+   var bestmatch;
+   
+
+   for(var i = 0; i < friends.length; i++){
+       var score = 0
+    
+       for (var j = 0; j < friends[i].scores.length; j++){
+        //math
+        score += Math.abs(friends[i].scores[j]-req.body.score[j])
+       }
+       if (score < maxDifference){
+           maxDifference = score
+
+           bestmatch = friends[i];
+
+       }
+
+
+       
+   }
+
+   res.send(bestmatch);
+      
     });
 };
