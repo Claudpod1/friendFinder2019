@@ -168,89 +168,94 @@
             </div>
         </footer>
 
-        <div class="modal fade" id="resultsModal" tabindex="-1" role="dialog" aria-labelledby="resultsModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
+        <div class="modal fade" id="resultsModal" tabindex="-1" role="dialog" aria-labelledby="resultsModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
+                        <h5 class="modal-title" id="exampleModalLabel">Your match is ......</h5>
+                        <div class="modal-body">
+                            <h3 id="modal-match-title"></h3>
+                        </div>
+                        <img id="thisIsAmatchPhoto">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="modal-body">
-                      ...
-                    </div>
+
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
                     </div>
-                  </div>
+
                 </div>
-              </div>
-    </div>
+            </div>
+        </div>
 
-    <script type="text/javascript">
+        <script type="text/javascript">
 
-        $("#submit").on("click", function (event) {
-            event.preventDefault();
+            $("#submit").on("click", function (event) {
+                event.preventDefault();
 
 
-            function getAnswers() {
-                var getAns = true;
-                $(".form-control").each(function () {
-                    if ($(this).val() === "") {
-                        getAns = false;
-                    }
-                });
-                $(".chose-select").each(function(){
-                    if ($(this).val() === ""){
-                        getAns = false;
-                    }
-                });
+                function getAnswers() {
+                    var getAns = true;
+                    $(".form-control").each(function () {
+                        if ($(this).val() === "") {
+                            getAns = false;
+                        }
+                    });
+                    $(".chose-select").each(function () {
+                        if ($(this).val() === "") {
+                            getAns = false;
+                        }
+                    });
 
-                return getAns;
-            }
-
-            console.log(getAnswers());
-            
-            if(getAnswers()){
-
-                var newFriend = {
-                    name: $(`#name`).val().trim(),
-                    photo: $(`#photo`).val().trim(),
-                    score: [
-                        $(`#q1`).val(),
-                        $(`#q2`).val(),
-                        $(`#q3`).val(),
-                        $(`#q4`).val(),
-                        $(`#q5`).val(),
-                        $(`#q6`).val(),
-                        $(`#q7`).val(),
-                        $(`#q8`).val(),
-                        $(`#q9`).val(),
-                        $(`#q10`).val()
-
-                    ]
+                    return getAns;
                 }
-                console.log(newFriend);
 
-                 $.post("/api/friends", newFriend , function(data){
-                     console.log(data);
+                console.log(getAnswers());
 
-                     //add data to modal!!!!! for example we did in class with lindsay 
-                     data
+                if (getAnswers()) {
 
-                     $(`#resultsModal`).modal("toggle")
+                    var newFriend = {
+                        name: $(`#name`).val().trim(),
+                        photo: $(`#photo`).val().trim(),
+                        score: [
+                            $(`#q1`).val(),
+                            $(`#q2`).val(),
+                            $(`#q3`).val(),
+                            $(`#q4`).val(),
+                            $(`#q5`).val(),
+                            $(`#q6`).val(),
+                            $(`#q7`).val(),
+                            $(`#q8`).val(),
+                            $(`#q9`).val(),
+                            $(`#q10`).val()
 
-                    
-                 })
+                        ]
+                    }
+                    console.log(newFriend);
 
-            }else{
-                 alert("Please fill out the entire form")
-            }
-        })
+                    $.post("/api/friends", newFriend, function (data) {
+                        console.log(data);
 
-    </script>
+                        //add data to modal!!!!! for example we did in class with lindsay 
+                        $("#modal-match-title").text(data.name);
+                        //  $("#thisIsAmatchPhoto").attr(data.photo);
+
+                        $(`#resultsModal`).modal("toggle");
+
+
+
+                    })
+
+                } else {
+                    alert("Please fill out the entire form")
+                }
+            });
+
+        </script>
 
 
 </body>
